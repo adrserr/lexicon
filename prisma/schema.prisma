@@ -1,0 +1,93 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id    String @id @default(cuid())
+  email String @unique
+
+  name    String
+  surname String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  password  Password?
+  notes     Note[]
+  words     Word[]
+  languages Language[]
+}
+
+model Password {
+  hash String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique
+}
+
+model Note {
+  id    String @id @default(cuid())
+  title String
+  body  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+}
+
+model Language {
+  id   String @id @default(cuid())
+  code String
+  name String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+
+  words       Word[]
+  definitions Definition[]
+}
+
+model Word {
+  id   String @id @default(cuid())
+  text String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  languageId String
+
+  definitions Definition[]
+
+  TranslationA Translation[] @relation("WordA")
+  TranslationB Translation[] @relation("WordB")
+}
+
+model Definition {
+  id String @id @default(cuid())
+
+  word   Word   @relation(fields: [wordId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  wordId String
+
+  language   Language @relation(fields: [languageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  languageId String
+
+  definition String
+}
+
+model Translation {
+  id String @id @default(cuid())
+
+  wordA   Word   @relation(fields: [wordAId], references: [id], name: "WordA", onDelete: Cascade, onUpdate: Cascade)
+  wordAId String
+
+  wordB   Word   @relation(fields: [wordBId], references: [id], name: "WordB", onDelete: Cascade, onUpdate: Cascade)
+  wordBId String
+}

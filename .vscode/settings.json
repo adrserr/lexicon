@@ -1,0 +1,12 @@
+{
+  "prisma.fileWatcher": false,
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "database": "${workspaceFolder:lexicon}/prisma/data.db",
+      "name": "dev"
+    }
+  ],
+  "sqltools.useNodeRuntime": true
+}
