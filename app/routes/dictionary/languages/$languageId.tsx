@@ -34,6 +34,5 @@ export async function action({ request, params }: ActionArgs) {
 
 export default function Language() {
   const { langauge } = useLoaderData<typeof loader>()
-  console.log('Language ______', langauge)
   return <LanguageForm language={langauge} />
 }

@@ -14,7 +14,6 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function Languages() {
   const { languages } = useLoaderData<typeof loader>()
-  console.log(languages)
   return (
     <>
       <h3 className="pb-4 font-basement text-2xl font-bold capitalize">
