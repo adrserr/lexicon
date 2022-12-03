@@ -71,7 +71,6 @@ export default function LoginPage() {
   const emailRef = React.useRef<HTMLInputElement>(null)
   const passwordRef = React.useRef<HTMLInputElement>(null)
 
-  console.log(passwordRef.current)
   React.useEffect(() => {
     if (actionData?.errors?.email) {
       emailRef.current?.focus()
@@ -81,7 +80,7 @@ export default function LoginPage() {
   }, [actionData])
 
   return (
-    <div className="flex min-h-full flex-col justify-center">
+    <div className="flex min-h-full flex-col justify-center font-inter">
       <div className="mx-auto w-full max-w-md px-8">
         <Form method="post" className="space-y-6">
           <div>

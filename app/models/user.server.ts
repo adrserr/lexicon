@@ -64,3 +64,42 @@ export async function verifyLogin(
 
   return userWithoutPassword
 }
+
+export async function changePassword(
+  oldPassword: Password['hash'],
+  newPassword: string,
+  newPasswordRepetition: string,
+  email: User['email']
+) {
+  const user = await prisma.user.findUnique({
+    where: { email },
+    include: { password: true },
+  })
+
+  if (!user || !user.password) return null
+
+  const isValid = await bcrypt.compare(oldPassword, user?.password?.hash)
+
+  const areEqual = newPassword === newPasswordRepetition
+
+  if (!areEqual || !isValid) return null
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10)
+
+  return prisma.password.update({
+    where: { userId: user.id },
+    data: { hash: hashedPassword },
+  })
+}
+
+export async function updateUserInfo(
+  user: Pick<User, 'name' | 'surname' | 'email'>,
+  userId: User['id']
+) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      ...user,
+    },
+  })
+}

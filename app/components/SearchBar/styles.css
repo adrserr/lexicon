@@ -1,0 +1,14 @@
+@layer components {
+  /* Combobox Option Text */
+  [data-user-value] {
+    @apply font-inter font-bold;
+  }
+
+  [data-reach-combobox-option][data-highlighted] {
+    @apply bg-blue-100;
+  }
+
+  [data-reach-listbox-popover] {
+    @apply absolute top-0 left-0 z-50 h-28 w-32 border bg-yellow-500;
+  }
+}

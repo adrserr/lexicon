@@ -145,7 +145,7 @@ export default function Join() {
   }, [actionData])
 
   return (
-    <div className="flex min-h-full flex-col justify-center">
+    <div className="flex min-h-full flex-col justify-center font-inter">
       <div className="mx-auto w-full max-w-md px-8">
         <Form method="post" className="space-y-6">
           <div>
@@ -162,7 +162,8 @@ export default function Join() {
                 required
                 autoFocus={true}
                 name="name"
-                type="name"
+                type="text"
+                data-testid="name"
                 autoComplete="name"
                 aria-invalid={actionData?.errors?.name ? true : undefined}
                 aria-describedby="name-error"
@@ -188,9 +189,9 @@ export default function Join() {
                 ref={surnameRef}
                 id="surname"
                 required
-                autoFocus={true}
                 name="surname"
-                type="surname"
+                type="text"
+                data-testid="surname"
                 autoComplete="surname"
                 aria-invalid={actionData?.errors?.surname ? true : undefined}
                 aria-describedby="surname-error"
@@ -216,9 +217,9 @@ export default function Join() {
                 ref={emailRef}
                 id="email"
                 required
-                autoFocus={true}
                 name="email"
                 type="email"
+                data-testid="email"
                 autoComplete="email"
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-describedby="email-error"
@@ -245,6 +246,7 @@ export default function Join() {
                 ref={passwordRef}
                 name="password"
                 type="password"
+                data-testid="password"
                 autoComplete="new-password"
                 aria-invalid={actionData?.errors?.password ? true : undefined}
                 aria-describedby="password-error"

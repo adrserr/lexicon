@@ -11,7 +11,7 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function Index() {
   return (
-    <main className="relative flex min-h-screen items-center justify-center">
+    <main className="relative flex min-h-full items-center justify-center">
       <div className="grid">
         <h1 className="text-center font-basement text-5xl md:text-6xl lg:text-8xl">
           Lexicon

@@ -29,7 +29,9 @@
   Josh's Custom CSS Reset
   https://www.joshwcomeau.com/css/custom-css-reset/
 */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -37,7 +39,8 @@
   margin: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -46,35 +49,51 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-img, picture, video, canvas, svg {
+img,
+picture,
+video,
+canvas,
+svg {
   display: block;
   max-width: 100%;
 }
 
-input, button, textarea, select {
+input,
+button,
+textarea,
+select {
   font: inherit;
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
 }
 
-#root, #__next {
+#root,
+#__next {
   isolation: isolate;
 }
 
-main {
+body {
   display: block;
+  /* min-height: 100vh; */
+  /* min-height: -webkit-fill-available; */
 }
 
-main::after {
+body::after {
   background: url('/bg.jpg') no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  content: "";
-  opacity: 0.15 ;
+  content: '';
+  opacity: 0.15;
   top: 0;
   left: 0;
   bottom: 0;
@@ -83,18 +102,20 @@ main::after {
   z-index: -1;
 }
 
-input#search {
-  position: relative;
-}
-
-input#search:after {
-  background-color: red; 
-  bottom: 0;
-  content: '';
-  display: block;
-  height: 100%;
-  left: 50%;
-  position: absolute;
-  transform: translate(-50%,0);
-  width: 50px;
+select#language {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418' /%3E%3C/svg%3E%0A");
+  background-repeat: no-repeat;
+  background-position-x: center;
+  background-size: 1.5rem;
+  background-position-y: center;
+  /* border: 1px solid #dfdfdf;
+  border-radius: 2px;
+  margin-right: 2rem; */
+  padding: 1rem;
+  padding-right: 2rem;
+  width: 2rem;
+  text-overflow: ellipsis;
 }

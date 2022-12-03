@@ -1,0 +1,7 @@
+/* Components styles */
+@import url('../Components/SearchBar/styles.css');
+
+/* tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

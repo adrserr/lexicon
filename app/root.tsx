@@ -9,7 +9,7 @@ import {
   ScrollRestoration,
 } from '@remix-run/react'
 
-import tailwindStylesheetUrl from './styles/tailwind.css'
+import tailwindStylesheetUrl from './styles/tailwindOutput.css'
 import globalStylesUrl from './styles/global.css'
 import { getUser } from './session.server'
 
@@ -39,7 +39,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="h-full">
+      <body className="flex min-h-full flex-col">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

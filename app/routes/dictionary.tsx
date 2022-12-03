@@ -1,82 +1,87 @@
-import { Form, useFetcher, useLoaderData } from '@remix-run/react'
-import { json } from '@remix-run/server-runtime'
+import { Form, Outlet, useFetcher, useLoaderData } from '@remix-run/react'
+import { json, redirect } from '@remix-run/server-runtime'
 import type { LoaderArgs } from '@remix-run/server-runtime'
-import { getUserId, requireUser } from '../session.server'
-import { searchUserWords } from '../models/words.server'
-import type { User } from '@prisma/client'
-import { getLanguagesWithDefinitions } from '../models/language.server'
-
-async function getWordSuggestions(request: Request, userId?: User['id']) {
-  const theUserId = userId ? userId : await getUserId(request)
-  const url = await new URL(request.url)
-  const searchValue = url.searchParams.get('search') || ''
-  return searchValue && theUserId
-    ? await searchUserWords(theUserId, searchValue)
-    : []
-}
+import { requireUser } from '~/session.server'
+import type { TranslationLanguage } from '~/models/language.server'
+import {
+  getLanguagesWithDefinitions,
+  getTranslationLanguagePairs,
+} from '~/models/language.server'
+import { getWordSuggestions } from '~/utils/wordSuggestions'
+import { AvatarMenu, SearchBar } from '~/components'
+import type { FetcherData } from '../types'
 
 export async function loader({ request }: LoaderArgs) {
   const user = await requireUser(request)
 
-  const lang = await getLanguagesWithDefinitions(user.id)
-  const words = await getWordSuggestions(request, user.id)
-  return json({ user, words, lang })
+  // url query params
+  const url = new URL(request.url)
+  const action = url.searchParams.get('action')
+  const search = url.searchParams.get('search')
+  const language = url.searchParams.get('language')
+
+  const languages = (await getLanguagesWithDefinitions(user.id)).map(
+    ({ name, id }) =>
+      ({ languageTo: name, languageToId: id } as TranslationLanguage)
+  )
+  const languageCombinations = await getTranslationLanguagePairs(user.id)
+  const allLanguages = [...languages, ...languageCombinations]
+  const suggestionWords = language
+    ? await getWordSuggestions(request, user.id, allLanguages[Number(language)])
+    : []
+
+  if (action === 'search' && search && language && !isNaN(Number(language))) {
+    const selectedLanguage = allLanguages[Number(language)]
+    const redirectUrl = `/dictionary/${
+      selectedLanguage.languageFrom ? selectedLanguage.languageFrom + '-' : ''
+    }${selectedLanguage.languageTo || ''}/${search}`
+    return redirect(redirectUrl)
+  }
+
+  return json({
+    user,
+    suggestionWords,
+    languages: allLanguages,
+  })
 }
 
 export default function Dictionary() {
-  const { user, lang } = useLoaderData<typeof loader>()
-  const suggestions = useFetcher<{
-    words: Awaited<ReturnType<typeof getWordSuggestions>>
-  }>()
+  const { user, languages } = useLoaderData<typeof loader>()
+  const search = useFetcher<FetcherData<typeof loader>>()
 
   return (
-    <div>
-      Welcome {user.name} to Lexicon your personal glossary
-      <Form action="/logout" method="post">
-        <button
-          type="submit"
-          className="rounded bg-slate-600 py-2 px-4 text-blue-100 hover:bg-blue-500 active:bg-blue-600"
-        >
-          Logout
-        </button>
-      </Form>
-      <suggestions.Form>
-        <div className="my-24 border">
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Search
-          </label>
-          <div className="mt-1 flex">
-            <input
-              // ref={emailRef}
-              id="search"
-              required
-              // autoFocus={true}
-              name="search"
-              type="text"
-              pattern="[a-zA-Z]"
-              onChange={(event) => suggestions.submit(event.target.form)}
-              // autoComplete="email"
-              // aria-invalid={actionData?.errors?.email ? true : undefined}
-              // aria-describedby="email-error"
-              className="w-5/12 rounded-l-full border border-r-0 border-gray-500 px-2 py-1 text-lg"
-            />
-            <div></div>
-            <select
-              name="language"
-              className="w-4/12 rounded-r-full border border-l-0 border-gray-500 px-2 py-1 text-lg"
-            >
-              <option value="value1">Value 1</option>
-              <option value="value2" selected>
-                Value 2
-              </option>
-              <option value="value3">Value 3</option>
-            </select>
+    <>
+      <header className="h-44 w-full p-6 sm:h-28">
+        <div className="grid grid-cols-[auto_1fr] items-center gap-4 sm:grid-cols-[auto_2fr_auto] sm:grid-rows-none sm:gap-6 2xl:grid-cols-[1fr_2fr_1fr]">
+          <div className="grid-row-2 grid">
+            <h1 className="font-basement text-xl md:text-2xl lg:text-4xl">
+              Lexicon
+            </h1>
+            <p className="font-inter text-sm font-extralight tracking-widest md:text-base lg:text-xl">
+              Your digital glossary
+            </p>
           </div>
+
+          <div className="justify-self-end sm:order-3">
+            <AvatarMenu userName={user.name} />
+          </div>
+          <Form className="col-span-2 sm:col-span-1 2xl:flex 2xl:justify-center">
+            <SearchBar
+              suggestions={search.data?.suggestionWords || []}
+              languages={languages}
+              searchOnChange={(e) => {
+                search.submit(e.target.form)
+              }}
+            />
+          </Form>
         </div>
-      </suggestions.Form>
-    </div>
+      </header>
+      <main className="flex-[1_0_auto] p-6">
+        <Outlet />
+      </main>
+      <footer className="flex h-14 shrink-0 items-center justify-center border-t font-basement text-sm font-bold">
+        adrserr © 2022
+      </footer>
+    </>
   )
 }

@@ -52,6 +52,8 @@ model Language {
 
   words       Word[]
   definitions Definition[]
+
+  @@unique([name, userId])
 }
 
 model Word {
@@ -68,6 +70,8 @@ model Word {
 
   TranslationA Translation[] @relation("WordA")
   TranslationB Translation[] @relation("WordB")
+
+  @@unique([text, languageId, userId])
 }
 
 model Definition {
@@ -83,11 +87,13 @@ model Definition {
 }
 
 model Translation {
-  id String @id @default(cuid())
+  id String @default(cuid())
 
   wordA   Word   @relation(fields: [wordAId], references: [id], name: "WordA", onDelete: Cascade, onUpdate: Cascade)
   wordAId String
 
   wordB   Word   @relation(fields: [wordBId], references: [id], name: "WordB", onDelete: Cascade, onUpdate: Cascade)
   wordBId String
+
+  @@id([wordAId, wordBId])
 }
