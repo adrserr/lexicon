@@ -220,13 +220,13 @@ interface ListProps {
 }
 const List = React.forwardRef<HTMLUListElement, JSX.IntrinsicElements['ul']>(
   ({ children, ...props }: ListProps, forwardedRef) => {
-    const { listId } = useComboboxContext()
+    // const { listId } = useComboboxContext()
     return (
       <ul
         ref={forwardedRef}
         data-test-id="combobox-dropdown-list"
         role="listbox"
-        id={listId}
+        // id={listId}
         {...props}
       >
         {children}
