@@ -57,11 +57,9 @@ CREATE TABLE "Definition" (
 
 -- CreateTable
 CREATE TABLE "Translation" (
-    "id" TEXT NOT NULL,
+    "id" TEXT NOT NULL PRIMARY KEY,
     "wordAId" TEXT NOT NULL,
     "wordBId" TEXT NOT NULL,
-
-    PRIMARY KEY ("wordAId", "wordBId"),
     CONSTRAINT "Translation_wordAId_fkey" FOREIGN KEY ("wordAId") REFERENCES "Word" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "Translation_wordBId_fkey" FOREIGN KEY ("wordBId") REFERENCES "Word" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -77,3 +75,6 @@ CREATE UNIQUE INDEX "Language_name_userId_key" ON "Language"("name", "userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Word_text_languageId_userId_key" ON "Word"("text", "languageId", "userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Translation_wordAId_wordBId_key" ON "Translation"("wordAId", "wordBId");

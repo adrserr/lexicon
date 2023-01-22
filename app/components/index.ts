@@ -1,5 +1,5 @@
 export { SearchBar } from './SearchBar/SearchBar'
-export { WordForm } from './WordForm/WordForm'
+export * from './WordForm'
 export { Spinner } from './Spinner/Spinner'
 export { Portal, usePortal } from './Portal/Portal'
 export { LanguageSelect } from './LanguageSelect/LanguageSelect'

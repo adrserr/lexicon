@@ -40,16 +40,21 @@ export function SearchBar({
           required
           name="search"
           autoComplete="off"
+          data-testid="combobox"
           placeholder={inputPlaceholder}
           className="p-r-4 w-full flex-grow text-ellipsis rounded-none border-b border-gray-500 bg-transparent p-0 py-2 font-inter text-base placeholder-shown:text-ellipsis placeholder-shown:font-inter placeholder-shown:tracking-tight focus-visible:border-b focus-visible:border-b-blue-700 focus-visible:outline-none"
           onChange={searchOnChange}
         />
         {suggestions && (
-          <ComboboxPopover className="border bg-white">
+          <ComboboxPopover
+            data-testid="combobox-popover"
+            className="border bg-white"
+          >
             {suggestions.length > 0 ? (
               <ComboboxList ref={comboboxRef}>
                 {suggestions.map((word) => (
                   <ComboboxOption
+                    data-testid={`combobox-${word.text}-option`}
                     className="block p-2 font-inter data-[reach-combobox-option]:font-bold"
                     value={word.text}
                     id={word.id}
@@ -111,6 +116,7 @@ export function SearchBar({
       >
         <Select.Trigger
           aria-labelledby="language-select-label"
+          data-testid="language-select-button"
           className="flex w-auto items-center gap-2 text-ellipsis whitespace-nowrap border-b border-gray-500 bg-transparent font-inter text-base"
         >
           <Select.Value placeholder="pick a language" />
@@ -170,6 +176,7 @@ export function SearchBar({
         type="submit"
         name="action"
         value="search"
+        data-testid="search-button"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

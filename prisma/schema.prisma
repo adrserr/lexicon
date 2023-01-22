@@ -87,7 +87,7 @@ model Definition {
 }
 
 model Translation {
-  id String @default(cuid())
+  id String @id @default(cuid())
 
   wordA   Word   @relation(fields: [wordAId], references: [id], name: "WordA", onDelete: Cascade, onUpdate: Cascade)
   wordAId String
@@ -95,5 +95,5 @@ model Translation {
   wordB   Word   @relation(fields: [wordBId], references: [id], name: "WordB", onDelete: Cascade, onUpdate: Cascade)
   wordBId String
 
-  @@id([wordAId, wordBId])
+  @@unique([wordAId, wordBId])
 }

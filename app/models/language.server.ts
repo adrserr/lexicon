@@ -1,12 +1,23 @@
 import type { Language, User } from '@prisma/client'
 import { prisma } from '~/db.server'
 
+/**
+ * Get a language by Id
+ * @param languageId
+ * @returns
+ */
 export function getLanguageById(languageId: Language['id']) {
   return prisma.language.findUnique({
     where: { id: languageId },
   })
 }
 
+/**
+ * Get a language searching by userId and the language name
+ * @param name language name
+ * @param userId user id
+ * @returns
+ */
 export function getLanguageByNameAndUser(
   name: Language['name'],
   userId: Language['userId']
@@ -17,6 +28,11 @@ export function getLanguageByNameAndUser(
   })
 }
 
+/**
+ * Get all languages of a user
+ * @param userId user id
+ * @returns
+ */
 export function getLanguages(userId: User['id']) {
   return prisma.language.findMany({
     select: { name: true, code: true, id: true },
@@ -24,6 +40,11 @@ export function getLanguages(userId: User['id']) {
   })
 }
 
+/**
+ * Get all user languages that contain definitions
+ * @param userId user id
+ * @returns
+ */
 export function getLanguagesWithDefinitions(userId: User['id']) {
   return prisma.language.findMany({
     select: { id: true, name: true, code: true },
@@ -37,6 +58,11 @@ export interface TranslationLanguage {
   languageFromId: string
   languageToId: string
 }
+/**
+ * Get all user language combinations that have at least one translation in common
+ * @param id user id
+ * @returns
+ */
 export function getTranslationLanguagePairs(id: User['id']) {
   return prisma.$queryRaw<
     TranslationLanguage[]
@@ -51,6 +77,11 @@ export function getTranslationLanguagePairs(id: User['id']) {
                                                   ORDER BY l1.name ASC, l2.name ASC`
 }
 
+/**
+ * Update a language by Id
+ * @param language language omitting user Id
+ * @returns
+ */
 export function updateLanguageById(language: Omit<Language, 'userId'>) {
   return prisma.language.update({
     where: { id: language.id },
@@ -61,6 +92,20 @@ export function updateLanguageById(language: Omit<Language, 'userId'>) {
   })
 }
 
+/**
+ * Create a new language
+ * @param language language omitting the id
+ * @returns
+ */
 export function createLanguage(language: Omit<Language, 'id'>) {
   return prisma.language.create({ data: { ...language } })
+}
+
+/**
+ * Delete a language by id
+ * @param id language id
+ * @returns
+ */
+export function deleteLanguageById(id: Language['id']) {
+  return prisma.language.delete({ where: { id } })
 }

@@ -5,7 +5,7 @@ describe('smoke tests', () => {
     cy.cleanupUser()
   })
 
-  it.only('should allow you to register and login', () => {
+  it('should allow you to register and login', () => {
     const signupForm = {
       email: `${faker.internet.userName()}@example.com`,
       password: faker.internet.password(),
@@ -16,7 +16,6 @@ describe('smoke tests', () => {
     cy.then(() => ({ email: signupForm.email })).as('user')
 
     cy.visitAndCheck('/')
-
     cy.findByRole('link', { name: /sign up/i }).click()
     cy.findByTestId('name').type(signupForm.name)
     cy.findByTestId('surname').type(signupForm.surname)
@@ -27,24 +26,19 @@ describe('smoke tests', () => {
     cy.url().should('eq', Cypress.config().baseUrl + '/dictionary')
   })
 
-  it.only('should allow you login', () => {
-    const signupForm = {
+  it('should allow you login', () => {
+    const loginForm = {
       email: `${faker.internet.userName()}@example.com`,
-      password: faker.internet.password(),
-      name: faker.name.firstName(),
-      surname: faker.name.lastName(),
+      password: 'myreallystrongpassword',
     }
-
-    cy.then(() => ({ email: signupForm.email })).as('user')
-
+    cy.createUser({ email: loginForm.email })
     cy.visitAndCheck('/')
 
-    cy.findByRole('link', { name: /sign up/i }).click()
-    cy.findByTestId('name').type(signupForm.name)
-    cy.findByTestId('surname').type(signupForm.surname)
-    cy.findByTestId('email').type(signupForm.email)
-    cy.findByTestId('password').type(signupForm.password)
-    cy.findByRole('button', { name: /create account/i }).click()
+    cy.findByRole('link', { name: /log in/i }).click()
+    cy.findByTestId('email').type(loginForm.email)
+    cy.findByTestId('password').type(loginForm.password)
+
+    cy.findByRole('button', { name: /log in/i }).click()
 
     cy.url().should('eq', Cypress.config().baseUrl + '/dictionary')
   })
@@ -56,7 +50,7 @@ describe('smoke tests', () => {
     }
     cy.login()
 
-    cy.visitAndCheck('/')
+    cy.visitAndCheck('/notes')
 
     cy.findByRole('link', { name: /notes/i }).click()
     cy.findByText('No notes yet')

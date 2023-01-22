@@ -99,6 +99,7 @@ export default function LoginPage() {
                 name="email"
                 type="email"
                 autoComplete="email"
+                data-testid="email"
                 aria-invalid={actionData?.errors?.email ? true : undefined}
                 aria-describedby="email-error"
                 className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
@@ -124,6 +125,7 @@ export default function LoginPage() {
                 ref={passwordRef}
                 name="password"
                 type="password"
+                data-testid="password"
                 autoComplete="current-password"
                 aria-invalid={actionData?.errors?.password ? true : undefined}
                 aria-describedby="password-error"

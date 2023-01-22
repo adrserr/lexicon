@@ -38,6 +38,32 @@ declare global {
        *    cy.visitAndCheck('/', 500)
        */
       visitAndCheck: typeof visitAndCheck
+
+      /**
+       * Creates a new @user
+       *
+       * @returns {typeof createUser}
+       * @memberof Chainable
+       * @example
+       *    cy.createUser()
+       * @example
+       *    cy.createUser({ email: 'whatever@example.com' })
+       */
+      createUser: typeof createUser
+
+      /**
+       * Creates a new @user
+       *
+       * @returns {typeof createUser}
+       * @memberof Chainable
+       * @example
+       *    cy.setupData()
+       * @example
+       *    cy.setupData('test@example.com')
+       * @example
+       *    cy.setupData('test@example.com', 'true')
+       */
+      setupData: typeof setupData
     }
   }
 }
@@ -55,6 +81,23 @@ function login({
       .replace(/.*<cookie>(?<cookieValue>.*)<\/cookie>.*/s, '$<cookieValue>')
       .trim()
     cy.setCookie('__session', cookieValue)
+  })
+  return cy.get('@user')
+}
+
+function createUser({
+  email = faker.internet.email(undefined, undefined, 'example.com'),
+}: {
+  email?: string
+} = {}) {
+  cy.then(() => ({ email })).as('user')
+  cy.exec(
+    `npx ts-node --require tsconfig-paths/register ./cypress/support/create-user.ts "${email}"`
+  ).then(({ stdout }) => {
+    // const cookieValue = stdout
+    //   .replace(/.*<cookie>(?<cookieValue>.*)<\/cookie>.*/s, '$<cookieValue>')
+    //   .trim()
+    // cy.setCookie('__session', cookieValue)
   })
   return cy.get('@user')
 }
@@ -90,6 +133,25 @@ function visitAndCheck(url: string, waitTime: number = 1000) {
   cy.location('pathname').should('contain', url).wait(waitTime)
 }
 
+function setupData(
+  email = faker.internet.email(undefined, undefined, 'example.com'),
+  login = false
+) {
+  cy.then(() => ({ email })).as('user')
+  cy.exec(
+    `npx ts-node --require tsconfig-paths/register ./cypress/support/setup-data.ts "${email}" "${login}"`
+  ).then(({ stdout }) => {
+    if (login) {
+      const cookieValue = stdout
+        .replace(/.*<cookie>(?<cookieValue>.*)<\/cookie>.*/s, '$<cookieValue>')
+        .trim()
+      cy.setCookie('__session', cookieValue)
+    }
+  })
+}
+
 Cypress.Commands.add('login', login)
 Cypress.Commands.add('cleanupUser', cleanupUser)
 Cypress.Commands.add('visitAndCheck', visitAndCheck)
+Cypress.Commands.add('createUser', createUser)
+Cypress.Commands.add('setupData', setupData)

@@ -51,7 +51,8 @@ function getTranalationField(
   key: number | string,
   deleteFn: (key: number | string) => void,
   translation?: string,
-  language?: string
+  language?: string,
+  type?: 'A' | 'B'
 ) {
   return {
     key,
@@ -89,6 +90,12 @@ function getTranalationField(
               id={`translation${key}`}
               name={`translation${key}`}
             />
+            <input
+              type="hidden"
+              id={`translationType${key}`}
+              name={`translationType${key}`}
+              value={type}
+            />
             <LanguageSelect
               name={`language${key}`}
               label={`language${key}`}
@@ -104,19 +111,24 @@ function getTranalationField(
 interface WordFormProps {
   language: string | undefined
   word: string | undefined
-  theDefinitions: Pick<Definition, 'id' | 'definition'>[]
-  theTranslations: {
+  wordId?: string
+  theDefinitions?: Pick<Definition, 'id' | 'definition'>[]
+  theTranslations?: {
     languageId: string
     language: string
     id: string
     text: string
+    wordId: string
+    translationA: boolean
+    translationB: boolean
   }[]
 }
 export function WordForm({
   language,
   word,
-  theDefinitions,
-  theTranslations,
+  theDefinitions = [],
+  theTranslations = [],
+  wordId,
 }: WordFormProps) {
   const nextDefinitionKey = React.useRef(0)
   const nextTranslationKey = React.useRef(0)
@@ -145,7 +157,8 @@ export function WordForm({
           setTransaltions((trans) => trans.filter((el) => el.key !== key))
         },
         el.text,
-        el.language
+        el.language,
+        el.translationA ? 'A' : 'B'
       )
     ) || []
   )
@@ -153,7 +166,7 @@ export function WordForm({
     <div className="flex h-full w-full justify-center font-inter">
       <div className="w-full max-w-md">
         <Form
-          method="post"
+          method={wordId ? 'put' : 'post'}
           encType="multipart/form-data"
           className="space-y-6 font-inter"
         >
@@ -242,9 +255,23 @@ export function WordForm({
             className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
             type="submit"
           >
-            Create Word
+            {wordId ? 'Edit Word' : 'Create Word'}
           </button>
         </Form>
+        {wordId && (
+          <Form
+            className="mt-3 font-inter"
+            method="delete"
+            data-testid="delete-language-form"
+          >
+            <button
+              className="w-full rounded bg-red-500  py-2 px-4 text-white hover:bg-red-600 focus:bg-red-400"
+              type="submit"
+            >
+              Delete Word
+            </button>
+          </Form>
+        )}
       </div>
     </div>
   )

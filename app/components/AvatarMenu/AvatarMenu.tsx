@@ -1,5 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import { Link, useFetcher } from '@remix-run/react'
+import React from 'react'
 
 interface AvatarMenuProps {
   userName: string
@@ -7,20 +8,31 @@ interface AvatarMenuProps {
 
 export function AvatarMenu({ userName }: AvatarMenuProps) {
   const logoutFetcher = useFetcher()
+  const [open, setOpen] = React.useState(false)
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger className="flex h-10 w-10 items-center justify-center  rounded-full bg-black text-white">
+    <DropdownMenu.Root open={open} onOpenChange={setOpen}>
+      <DropdownMenu.Trigger
+        data-testid="avatar-button"
+        className="flex h-10 w-10 items-center justify-center  rounded-full bg-black text-white"
+      >
         {userName.charAt(0)}
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className="rounded-lg bg-white py-3 px-5 shadow-xl">
+        <DropdownMenu.Content
+          data-testid="avatar-dropdown"
+          className="rounded-lg bg-white py-3 px-5 shadow-xl"
+        >
           <DropdownMenu.Label />
           <DropdownMenu.Item />
 
           <DropdownMenu.Group className="grid gap-2">
             <DropdownMenu.Item>
-              <Link to="/dictionary/me" className="flex gap-2">
+              <Link
+                to="/dictionary/me"
+                onClick={() => setOpen(false)}
+                className="flex gap-2"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -39,7 +51,11 @@ export function AvatarMenu({ userName }: AvatarMenuProps) {
               </Link>
             </DropdownMenu.Item>
             <DropdownMenu.Item>
-              <Link to="/dictionary/words" className="flex gap-2">
+              <Link
+                to="/dictionary/words"
+                onClick={() => setOpen(false)}
+                className="flex gap-2"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -58,7 +74,11 @@ export function AvatarMenu({ userName }: AvatarMenuProps) {
               </Link>
             </DropdownMenu.Item>
             <DropdownMenu.Item>
-              <Link to="/dictionary/languages" className="flex gap-2">
+              <Link
+                to="/dictionary/languages"
+                onClick={() => setOpen(false)}
+                className="flex gap-2"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -108,12 +128,6 @@ export function AvatarMenu({ userName }: AvatarMenuProps) {
           <DropdownMenu.CheckboxItem>
             <DropdownMenu.ItemIndicator />
           </DropdownMenu.CheckboxItem>
-
-          {/* <DropdownMenu.RadioGroup>
-            <DropdownMenu.RadioItem>
-              <DropdownMenu.ItemIndicator />
-            </DropdownMenu.RadioItem>
-          </DropdownMenu.RadioGroup> */}
 
           <DropdownMenu.Sub>
             <DropdownMenu.SubTrigger />

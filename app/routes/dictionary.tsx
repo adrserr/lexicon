@@ -1,4 +1,4 @@
-import { Form, Outlet, useFetcher, useLoaderData } from '@remix-run/react'
+import { Form, Link, Outlet, useFetcher, useLoaderData } from '@remix-run/react'
 import { json, redirect } from '@remix-run/server-runtime'
 import type { LoaderArgs } from '@remix-run/server-runtime'
 import { requireUser } from '~/session.server'
@@ -54,12 +54,14 @@ export default function Dictionary() {
       <header className="h-44 w-full p-6 sm:h-28">
         <div className="grid grid-cols-[auto_1fr] items-center gap-4 sm:grid-cols-[auto_2fr_auto] sm:grid-rows-none sm:gap-6 2xl:grid-cols-[1fr_2fr_1fr]">
           <div className="grid-row-2 grid">
-            <h1 className="font-basement text-xl md:text-2xl lg:text-4xl">
-              Lexicon
-            </h1>
-            <p className="font-inter text-sm font-extralight tracking-widest md:text-base lg:text-xl">
-              Your digital glossary
-            </p>
+            <Link to="/dictionary">
+              <h1 className="font-basement text-xl md:text-2xl lg:text-4xl">
+                Lexicon
+              </h1>
+              <p className="font-inter text-sm font-extralight tracking-widest md:text-base lg:text-xl">
+                Your digital glossary
+              </p>
+            </Link>
           </div>
 
           <div className="justify-self-end sm:order-3">
@@ -79,7 +81,7 @@ export default function Dictionary() {
       <main className="flex-[1_0_auto] p-6">
         <Outlet />
       </main>
-      <footer className="flex h-14 shrink-0 items-center justify-center border-t font-basement text-sm font-bold">
+      <footer className="flex h-14 shrink-0 items-center justify-center font-basement text-sm font-bold">
         adrserr © 2022
       </footer>
     </>
