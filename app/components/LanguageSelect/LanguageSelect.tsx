@@ -1,7 +1,7 @@
 import * as Select from '@radix-ui/react-select'
 import { useFetcher } from '@remix-run/react'
 import React from 'react'
-import type { loader } from '../../routes/resources/languages'
+import type { loader } from '../../routes/dictionary.languages'
 import type { FetcherData } from '../../types'
 
 interface LanguageSelectProps {

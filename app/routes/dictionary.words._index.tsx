@@ -1,8 +1,8 @@
 import type { LoaderArgs } from '@remix-run/server-runtime'
-import { getAllUserWords } from '../../models/words.server'
-import { requireUserId } from '../../session.server'
+import { getAllUserWords } from '../models/words.server'
+import { requireUserId } from '../session.server'
 import { Link, useLoaderData } from '@remix-run/react'
-import { getLanguages } from '../../models/language.server'
+import { getLanguages } from '../models/language.server'
 import { json } from '@remix-run/server-runtime'
 
 export async function loader({ request }: LoaderArgs) {

@@ -1,6 +1,6 @@
 import type { LoaderArgs, MetaFunction } from '@remix-run/server-runtime'
 import { json } from '@remix-run/server-runtime'
-import { requireUserId } from '../../session.server'
+import { requireUserId } from '../session.server'
 import { getLanguages } from '~/models/language.server'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
 

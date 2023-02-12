@@ -2,13 +2,13 @@ import { Link, useLoaderData, useParams } from '@remix-run/react'
 import type { LoaderArgs, MetaFunction } from '@remix-run/server-runtime'
 import { json } from '@remix-run/server-runtime'
 import invariant from 'tiny-invariant'
-import { getLanguageByNameAndUser } from '../../models/language.server'
+import { getLanguageByNameAndUser } from '../models/language.server'
 import {
   getWordDefinitions,
   getWordId,
   getWordTranslationsToLanguage,
-} from '../../models/words.server'
-import { requireUserId } from '../../session.server'
+} from '../models/words.server'
+import { requireUserId } from '../session.server'
 
 export async function loader({ params, request }: LoaderArgs) {
   invariant(params.language, 'Expected params.language')

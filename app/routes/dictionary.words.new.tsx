@@ -9,11 +9,11 @@ import {
   getTranslationsAndDefinitionsFromWordForm,
   WordForm,
 } from '~/components'
-import { getLanguageById } from '../../models/language.server'
-import { createWord } from '../../models/words.server'
-import { requireUserId } from '../../session.server'
-import { formDataToObject } from '../../utils/formData'
-import { isPrismaUniqueConstraintError } from '../../utils/prismaErrors'
+import { getLanguageById } from '../models/language.server'
+import { createWord } from '../models/words.server'
+import { requireUserId } from '../session.server'
+import { formDataToObject } from '../utils/formData'
+import { isPrismaUniqueConstraintError } from '../utils/prismaErrors'
 
 export const meta: MetaFunction = ({ location }) => {
   const searchParams = new URLSearchParams(location.search)

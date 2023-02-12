@@ -15,7 +15,7 @@ import {
 } from '~/models/language.server'
 import { requireUserId } from '~/session.server'
 import { Prisma } from '@prisma/client'
-import { isPrismaUniqueConstraintError } from '../../../utils/prismaErrors'
+import { isPrismaUniqueConstraintError } from '../utils/prismaErrors'
 
 export async function loader({ request, params }: LoaderArgs) {
   await requireUserId(request)

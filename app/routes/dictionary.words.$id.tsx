@@ -14,8 +14,8 @@ import {
 } from '~/components'
 import { deleteWordById, getWordById, updateWord } from '~/models/words.server'
 import { requireUser } from '~/session.server'
-import { formDataToObject } from '../../utils/formData'
-import { isPrismaUniqueConstraintError } from '../../utils/prismaErrors'
+import { formDataToObject } from '../utils/formData'
+import { isPrismaUniqueConstraintError } from '../utils/prismaErrors'
 
 function formatWord(
   word: NonNullable<Awaited<ReturnType<typeof getWordById>>>
@@ -119,7 +119,6 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 export default function WordEdit() {
   const { word } = useLoaderData<typeof loader>()
   const actionData = useActionData<typeof action>()
-  console.log(actionData)
   return (
     <WordForm
       word={word.text}
