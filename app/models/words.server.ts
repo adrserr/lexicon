@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import type { Language, User, Word } from '@prisma/client'
 import { prisma } from '~/db.server'
 
@@ -15,7 +15,12 @@ export function getAllUserWords(
   sort: Prisma.SortOrder = 'asc'
 ) {
   return prisma.word.findMany({
-    select: { id: true, text: true, languageId: true },
+    select: {
+      id: true,
+      text: true,
+      languageId: true,
+      language: { select: { name: true } },
+    },
     orderBy: { text: sort },
     where: { userId },
   })
@@ -237,24 +242,42 @@ export async function updateWord(
 ) {
   const oldWord = await getWordToUpdateById(word.id)
 
-  if(!oldWord) throw new Error("Word Not Found");
+  if (!oldWord) throw new Error('Word Not Found')
 
   const updatedTranslationIds = Object.keys(translations)
 
-    const {toBeRemovedTranslationsA, toBeUpsertTranslationsAIds} = oldWord?.TranslationA.reduce((translations, id) => {
-      !updatedTranslationIds.includes(id) ? translations.toBeRemovedTranslationsA.push(id) : translations.toBeUpsertTranslationsAIds.push(id)
-      return translations
-    }, {toBeRemovedTranslationsA: [] as string[], toBeUpsertTranslationsAIds: [] as string[]})
+  const { toBeRemovedTranslationsA, toBeUpsertTranslationsAIds } =
+    oldWord?.TranslationA.reduce(
+      (translations, id) => {
+        !updatedTranslationIds.includes(id)
+          ? translations.toBeRemovedTranslationsA.push(id)
+          : translations.toBeUpsertTranslationsAIds.push(id)
+        return translations
+      },
+      {
+        toBeRemovedTranslationsA: [] as string[],
+        toBeUpsertTranslationsAIds: [] as string[],
+      }
+    )
 
-    const {toBeRemovedTranslationsB, toBeUpsertTranslationsBIds} = oldWord?.TranslationB.reduce((translations, id) => {
-      !updatedTranslationIds.includes(id) ? translations.toBeRemovedTranslationsB.push(id) : translations.toBeUpsertTranslationsBIds.push(id)
-      return translations
-    }, {toBeRemovedTranslationsB: [] as string[], toBeUpsertTranslationsBIds: [] as string[]})
+  const { toBeRemovedTranslationsB, toBeUpsertTranslationsBIds } =
+    oldWord?.TranslationB.reduce(
+      (translations, id) => {
+        !updatedTranslationIds.includes(id)
+          ? translations.toBeRemovedTranslationsB.push(id)
+          : translations.toBeUpsertTranslationsBIds.push(id)
+        return translations
+      },
+      {
+        toBeRemovedTranslationsB: [] as string[],
+        toBeUpsertTranslationsBIds: [] as string[],
+      }
+    )
 
   const toBeUpsertTranslationsA = (toBeUpsertTranslationsAIds.map((id) => {
     const translation = translations[id]
     return {
-      where: {id},
+      where: { id },
       create: {
         wordAId: word.id,
         wordB: {
@@ -262,7 +285,7 @@ export async function updateWord(
             languageId: translation.language,
             text: translation.translation,
             userId: oldWord.userId,
-            TranslationA: {}
+            TranslationA: {},
           },
         },
       },
@@ -330,7 +353,7 @@ export async function updateWord(
       },
       TranslationB: {
         deleteMany: { id: { in: toBeRemovedTranslationsB } },
-        upsert: toBeUpsertTranslationsB
+        upsert: toBeUpsertTranslationsB,
       },
     },
   })

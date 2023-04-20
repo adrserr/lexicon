@@ -27,7 +27,7 @@ export function AvatarMenu({ userName }: AvatarMenuProps) {
           <DropdownMenu.Item />
 
           <DropdownMenu.Group className="grid gap-2">
-            <DropdownMenu.Item>
+            <DropdownMenu.Item className="py-2 px-1 outline-none hover:rounded hover:bg-blue-100 active:bg-blue-200">
               <Link
                 to="/dictionary/me"
                 onClick={() => setOpen(false)}
@@ -50,7 +50,7 @@ export function AvatarMenu({ userName }: AvatarMenuProps) {
                 Profile
               </Link>
             </DropdownMenu.Item>
-            <DropdownMenu.Item>
+            <DropdownMenu.Item className="py-2 px-1 outline-none hover:rounded hover:bg-blue-100 active:bg-blue-200">
               <Link
                 to="/dictionary/words"
                 onClick={() => setOpen(false)}
@@ -73,7 +73,7 @@ export function AvatarMenu({ userName }: AvatarMenuProps) {
                 Words
               </Link>
             </DropdownMenu.Item>
-            <DropdownMenu.Item>
+            <DropdownMenu.Item className="py-2 px-1 outline-none hover:rounded hover:bg-blue-100 active:bg-blue-200">
               <Link
                 to="/dictionary/languages"
                 onClick={() => setOpen(false)}
@@ -96,7 +96,7 @@ export function AvatarMenu({ userName }: AvatarMenuProps) {
                 Languages
               </Link>
             </DropdownMenu.Item>
-            <DropdownMenu.Item>
+            <DropdownMenu.Item className="py-2 px-1 outline-none hover:rounded hover:bg-blue-100 active:bg-blue-200">
               <button
                 className="flex gap-2"
                 onClick={() =>
